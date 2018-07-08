@@ -1,9 +1,9 @@
 package jdu.sprintplanner.repositories;
 
-import jdu.sprintplanner.model.Role;
+import jdu.sprintplanner.model.Register;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RegisterRepository extends JpaRepository<Register, Long> {
 }

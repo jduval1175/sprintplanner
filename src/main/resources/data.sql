@@ -1,5 +1,6 @@
---insert into Sprint values (1,10,'2018-07-07');
-insert into Sprint (ID, DAYS, START_DATE) values (1,10,'2018-07-07');
+insert into Sprint (ID, START_DATE, END_DATE) values (1,'2018-07-02','2018-07-15');
+insert into Sprint (ID, START_DATE, END_DATE) values (2,'2018-07-16','2018-07-29');
+insert into Sprint (ID, START_DATE, END_DATE) values (3,'2018-07-30','2018-08-05');
 
 
 insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (1, 'JDU', 'Duval', 'Jérôme', 'duval.je@free.fr');
@@ -8,7 +9,4 @@ insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (3, 'JAC', 
 insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (4, 'JAD', 'AD', 'Jérôme', 'duval.je@free.fr');
 
 
-insert into Role (ID, name) values (1, 'Developer');
-insert into Role (ID, name) values (2, 'Scrum Master');
-insert into Role (ID, name) values (3, 'Release');
-insert into Role (ID, name) values (4, 'Support');
+insert into Register (ID) values (1);

@@ -6,10 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -26,6 +23,14 @@ public class Sprint {
     @JsonFormat(pattern="yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date startDate;
-    private Integer days;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private Date endDate;
 
+    @OneToOne
+    private SupportTeam support;
+    @OneToOne
+    private Teammate releaser;
+    @OneToOne
+    private Teammate scrumMaster;
 }

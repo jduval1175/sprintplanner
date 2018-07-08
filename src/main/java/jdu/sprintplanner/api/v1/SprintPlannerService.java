@@ -1,11 +1,14 @@
 package jdu.sprintplanner.api.v1;
 
-import jdu.sprintplanner.model.Role;
+import jdu.sprintplanner.model.Register;
 import jdu.sprintplanner.model.Sprint;
+import jdu.sprintplanner.model.SupportTeam;
 import jdu.sprintplanner.model.Teammate;
-import jdu.sprintplanner.repositories.RoleRepository;
+import jdu.sprintplanner.repositories.RegisterRepository;
 import jdu.sprintplanner.repositories.SprintRepository;
+import jdu.sprintplanner.repositories.SupportTeamRepository;
 import jdu.sprintplanner.repositories.TeamMateRepository;
+import jdu.sprintplanner.service.SprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,30 +32,40 @@ public class SprintPlannerService {
     @Autowired
     private TeamMateRepository teammateRepository;
     @Autowired
-    private RoleRepository roleRepository;
+    private SupportTeamRepository supportRepository;
+    @Autowired
+    private RegisterRepository registerRepository;
+    @Autowired
+    private SprintService sprintService;
 
     ///////////////////////////////////////////////
     // SPRINTS
     ////
     @GetMapping("/sprints/{id}")
     public Sprint retrieveSprint(@PathVariable long id) throws ResourceNotFoundException {
-        return ofOptional(sprintRepository.findById(id))
+        return sprintService.findSprint(id)
                 .getOrElseThrow(() -> new ResourceNotFoundException("Sprint-" + id));
     }
 
     @GetMapping("/sprints")
     public List<Sprint> retrieveAllSprints() {
-        return sprintRepository.findAll();
+        return sprintService.findAll();
+    }
+
+    @GetMapping("/sprints/current")
+    public Sprint retrieveCurrentSprint() throws ResourceNotFoundException {
+        return sprintService.findCurrent()
+                .getOrElseThrow(() -> new ResourceNotFoundException("Sprint-Current"));
     }
 
     @DeleteMapping("/sprints/{id}")
     public void deleteSprint(@PathVariable long id) {
-        sprintRepository.deleteById(id);
+        sprintService.deleteSprint(id);
     }
 
     @PostMapping("/sprints")
     public ResponseEntity<Object> createSprint(@RequestBody Sprint sprint) {
-        Sprint savedSprint = sprintRepository.save(sprint);
+        Sprint savedSprint = sprintService.createSprint(sprint);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedSprint.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -60,14 +73,22 @@ public class SprintPlannerService {
 
     @PutMapping("/sprints/{id}")
     public ResponseEntity<Object> updateSprint(@RequestBody Sprint sprint, @PathVariable long id) {
-        Optional<Sprint> sprintOriginal = sprintRepository.findById(id);
-        if (!sprintOriginal.isPresent())
-            return ResponseEntity.notFound().build();
-        sprint.setId(id);
-        sprintRepository.save(sprint);
+        return sprintService.updateSprint(sprint, id)
+                .map(s -> ResponseEntity.noContent().build())
+                .getOrElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping(path = "/sprints/{id}/pause")
+    public ResponseEntity<Void> pauseJob(@PathVariable long id) {
+        sprintService.pauseSprint(id);
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping(path = "/sprints/{id}/resume")
+    public ResponseEntity<Void> resumeJob(@PathVariable long id) {
+        sprintService.resumeSprint(id);
+        return ResponseEntity.noContent().build();
+    }
     ///////////////////////////////////////////////
     // TEAMMATES
     ////
@@ -97,8 +118,8 @@ public class SprintPlannerService {
 
     @PutMapping("/teammates/{id}")
     public ResponseEntity<Object> updateTeammate(@RequestBody Teammate teammate, @PathVariable long id) {
-        Optional<Teammate> sprintOriginal = teammateRepository.findById(id);
-        if (!sprintOriginal.isPresent())
+        Optional<Teammate> oldTeammate = teammateRepository.findById(id);
+        if (!oldTeammate.isPresent())
             return ResponseEntity.notFound().build();
         teammate.setId(id);
         teammateRepository.save(teammate);
@@ -106,41 +127,83 @@ public class SprintPlannerService {
     }
 
     ///////////////////////////////////////////////
-    // ROLES
+    // SUPPORT
     ////
-    @GetMapping("/roles")
-    public List<Role> retrieveAllRoles() {
-        return roleRepository.findAll();
+    @GetMapping("/supports")
+    public List<SupportTeam> retrieveAllSupports() {
+        return supportRepository.findAll();
     }
 
-    @GetMapping("/roles/{id}")
-    public Role retrieveRole(@PathVariable long id) throws ResourceNotFoundException {
-        return ofOptional(roleRepository.findById(id))
-                .getOrElseThrow(() -> new ResourceNotFoundException("Role-" + id));
+    @GetMapping("/supports/{id}")
+    public SupportTeam retrieveSupport(@PathVariable long id) throws ResourceNotFoundException {
+        return ofOptional(supportRepository.findById(id))
+                .getOrElseThrow(() -> new ResourceNotFoundException("Support-" + id));
     }
 
-    @DeleteMapping("/roles/{id}")
-    public void deleteRole(@PathVariable long id) {
-        roleRepository.deleteById(id);
+    @DeleteMapping("/supports/{id}")
+    public void deleteSupport(@PathVariable long id) {
+        supportRepository.deleteById(id);
     }
 
-    @PostMapping("/roles")
-    public ResponseEntity<Object> createRole(@RequestBody Role role) {
-        Role savedRole = roleRepository.save(role);
+    @PostMapping("/supports")
+    public ResponseEntity<Object> createSupport(@RequestBody SupportTeam support) {
+        SupportTeam savedSupport = supportRepository.save(support);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(savedRole.getId()).toUri();
+                .buildAndExpand(savedSupport.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/roles/{id}")
-    public ResponseEntity<Object> updateRole(@RequestBody Role role, @PathVariable long id) {
-        Optional<Role> originalRole = roleRepository.findById(id);
-        if (!originalRole.isPresent())
+    @PutMapping("/supports/{id}")
+    public ResponseEntity<Object> updateSupport(@RequestBody SupportTeam support, @PathVariable long id) {
+        Optional<SupportTeam> oldSupport = supportRepository.findById(id);
+        if (!oldSupport.isPresent())
             return ResponseEntity.notFound().build();
-        role.setId(id);
-        roleRepository.save(role);
+        support.setId(id);
+        supportRepository.save(support);
         return ResponseEntity.noContent().build();
     }
+
+    ///////////////////////////////////////////////
+    // SUPPORT
+    ////
+    @GetMapping("/register")
+    public List<Register> retrieveAllRegisters() {
+        return registerRepository.findAll();
+    }
+
+    @GetMapping("/register/{id}")
+    public Register retrieveRegister(@PathVariable long id) throws ResourceNotFoundException {
+        return ofOptional(registerRepository.findById(id))
+                .getOrElseThrow(() -> new ResourceNotFoundException("Register-" + id));
+    }
+
+    @DeleteMapping("/register/{id}")
+    public void deleteRegister(@PathVariable long id) {
+        registerRepository.deleteById(id);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Object> createRegister(@RequestBody Register register) {
+        Register savedRegister = registerRepository.save(register);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedRegister.getId()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    @PutMapping("/register/{id}")
+    public ResponseEntity<Object> updateRegister(@RequestBody Register register, @PathVariable long id) {
+        Optional<Register> oldRegister = registerRepository.findById(id);
+        if (!oldRegister.isPresent())
+            return ResponseEntity.notFound().build();
+        register.setId(id);
+        registerRepository.save(register);
+        return ResponseEntity.noContent().build();
+    }
+    
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    // Exceptions
+    ////
 
     private class ResourceNotFoundException extends Throwable {
         private final String id;

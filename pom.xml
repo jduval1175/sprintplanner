@@ -56,6 +56,14 @@
 			<artifactId>spring-data-rest-core</artifactId>
 			<version>2.5.3.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 
 		<!-- Helpfull Stuff -->
 		<dependency>
@@ -68,29 +76,6 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.0</version>
 		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-		</dependency>
-
-		<!--<dependency>-->
-			<!--<groupId>com.fasterxml.jackson.datatype</groupId>-->
-			<!--<artifactId>jackson-datatype-jdk8</artifactId>-->
-		<!--</dependency>-->
-
-		<!--&lt;!&ndash; https://mvnrepository.com/artifact/org.yaml/snakeyaml &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>org.yaml</groupId>-->
-			<!--<artifactId>snakeyaml</artifactId>-->
-			<!--<version>1.21</version>-->
-		<!--</dependency>-->
-
-		<!--<dependency>-->
-			<!--<groupId>org.liquibase</groupId>-->
-			<!--<artifactId>liquibase-core</artifactId>-->
-		<!--</dependency>-->
-
 
 		<!-- Database H2 -->
 		<dependency>
@@ -111,6 +96,26 @@
 			<version>2.7.0</version>
 		</dependency>
 
+
+		<!-- Quartz -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+
+		<!--&lt;!&ndash; Spring Batch dependencies &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.batch</groupId>-->
+			<!--<artifactId>spring-batch-core</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.batch</groupId>-->
+			<!--<artifactId>spring-batch-infrastructure</artifactId>-->
+		<!--</dependency>-->
 
 	</dependencies>
 

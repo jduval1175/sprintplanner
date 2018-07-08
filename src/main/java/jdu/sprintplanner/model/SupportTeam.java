@@ -4,17 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name="TEAMMATE")
 @Getter
 @Setter
-public class Teammate {
+public class SupportTeam {
     @Id
     @GeneratedValue
     private long id;
-    private String trigram;
-    private String lastname;
-    private String firstname;
-    private String mail;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Teammate> members;
 }
