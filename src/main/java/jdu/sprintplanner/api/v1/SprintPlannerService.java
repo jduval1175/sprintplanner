@@ -89,6 +89,7 @@ public class SprintPlannerService {
         sprintService.resumeSprint(id);
         return ResponseEntity.noContent().build();
     }
+
     ///////////////////////////////////////////////
     // TEAMMATES
     ////
