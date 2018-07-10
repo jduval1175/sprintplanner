@@ -7,7 +7,7 @@ import jdu.sprintplanner.model.Teammate;
 import jdu.sprintplanner.repositories.RegisterRepository;
 import jdu.sprintplanner.repositories.SprintRepository;
 import jdu.sprintplanner.repositories.SupportTeamRepository;
-import jdu.sprintplanner.repositories.TeamMateRepository;
+import jdu.sprintplanner.repositories.TeammateRepository;
 import jdu.sprintplanner.service.SprintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class SprintPlannerService {
     @Autowired
     private SprintRepository sprintRepository;
     @Autowired
-    private TeamMateRepository teammateRepository;
+    private TeammateRepository teammateRepository;
     @Autowired
     private SupportTeamRepository supportRepository;
     @Autowired

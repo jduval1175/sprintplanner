@@ -34,7 +34,7 @@ public class EmailService {
         log.info("About to save job with key - {}", jobDetail.getKey());
         try {
             scheduler.scheduleJob(jobDetail, triggersForJob, false);
-            log.info("Job with key - {} saved sucessfully", jobDetail.getKey());
+            log.info("Job with key - {} saved successfully", jobDetail.getKey());
         } catch (SchedulerException e) {
             log.error("Could not save job with key - {} due to error - {}", jobDetail.getKey(), e.getLocalizedMessage());
             throw new IllegalArgumentException(e.getLocalizedMessage());

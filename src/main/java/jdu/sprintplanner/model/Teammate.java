@@ -17,4 +17,28 @@ public class Teammate {
     private String lastname;
     private String firstname;
     private String mail;
+
+    @Override
+    public String toString() {
+        return "Teammate{" +
+                "id=" + id +
+                ", trigram='" + trigram + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Teammate teammate = (Teammate) o;
+
+        return id == teammate.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }

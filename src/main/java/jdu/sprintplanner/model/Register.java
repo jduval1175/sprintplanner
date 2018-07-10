@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,12 +12,18 @@ import java.util.Set;
 @Setter
 public class Register {
     @Id
-    @GeneratedValue
     long id;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     Set<Teammate> release;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     Set<Teammate> scrum;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     Set<SupportTeam> support;
+
+    public Register() {
+        id = 1;
+        release = new HashSet<>();
+        scrum = new HashSet<>();
+        support = new HashSet<>();
+    }
 }

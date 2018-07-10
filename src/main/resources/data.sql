@@ -8,5 +8,11 @@ insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (2, 'JAB', 
 insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (3, 'JAC', 'AC', 'Jérôme', 'duval.je@free.fr');
 insert into Teammate (ID, TRIGRAM, LASTNAME, FIRSTNAME, MAIL) values (4, 'JAD', 'AD', 'Jérôme', 'duval.je@free.fr');
 
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (1,'RELEASE',1);
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (2,'RELEASE',3);
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (3,'RELEASE',4);
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (1,'SCRUM',4);
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (2,'SCRUM',1);
+insert into Planning (RANK,ROLE,TEAMMATE_ID) values (3,'SCRUM',3);
 
-insert into Register (ID) values (1);
+--insert into Register (ID) values (1);
